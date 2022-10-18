@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agence Voyage Grenoble</title>
-    <link rel="stylesheet" href="style/index.css">
-    <link rel="stylesheet_menu" href="style/menu.css">
+    <link rel="stylesheet" href="TP1/style/index.css">
+    <link rel="stylesheet_menu" href="TP1/style/menu.css">
 </head>
 <body>
-<?php include('menu.php'); ?>
+<?php include('TP1/menu.php'); ?>
     
     <div class="contenu">
         <h1>Travel Discount</h1>
