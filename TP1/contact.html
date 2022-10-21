@@ -24,32 +24,43 @@
             <li><a href="destinations.html">Destinations</a></li>
             <li><a href="audio.html">Voyage virtuel Audio</a></li>
             <li><a href="video.html">Voyage virtuel vidéo</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li class="active"><a href="contact.html">Contact</a></li>
         </ul>
     </div>
     <div class="contenu">
         <h1>Contact</h1>
         <form action="">
-            <div>
-                <label for="nom">Votre nom : </label>
-                <input type="text" name="nom" id="nom" required>
-            </div>
-            <div>
-                <label for="prenom">Votre prénom : </label>
-                <input type="text" name="prenom" id="prenom" required>
-            </div>
-            <div>
-                <label for="email">Votre e-mail :</label>
-                <input type="email" name="email" id="email" required>
-            </div>
-            <div>
-                <label for="tel">Votre numéro de téléphone</label>
-                <input type="tel" name="tel" id="tel" required>
-            </div>
-            <div>
-                <label for="message">Votre message :</label>
-                <textarea name="message" id="message" cols="30" rows="10">Votre message...</textarea>
-            </div>
+            <fieldset>
+                <div>
+                    <label for="nom">Votre nom : </label>
+                    <input type="text" name="nom" id="nom" required>
+                </div>
+                <div>
+                    <label for="prenom">Votre prénom : </label>
+                    <input type="text" name="prenom" id="prenom" required>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div>
+                    <label for="email">Votre e-mail :</label>
+                    <input type="email" name="email" id="email" required>
+                </div>
+                <div>
+                    <label for="tel">Votre numéro de téléphone :</label>
+                    <input type="tel" name="tel" id="tel" required>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div>
+                    <label for="objet">Objet :</label>
+                    <input type="text" name="objet" id="objet">
+                </div>
+                <div>
+                    <label for="message">Votre message :</label>
+                    <textarea name="message" id="message" cols="30" rows="10">Votre message...</textarea>
+                </div>
+            </fieldset>
+            
             <button type="submit">Envoyer</button>
         </form>
     </div>
