@@ -1,0 +1,8 @@
+var destinations = {"destination":[
+    {"image":"./media/espagne.jpg","pays":"Espagne","description":"Week-End Catalan en Amoureux","prix":230},
+    {"image":"./media/bresil.jpg","pays":"Brésil & Argentique","description":"Découverte entre Plaisir et Aventures","prix":1520},
+    {"image":"./media/irlande.jpg","pays":"Irlande","description":"A la mode Celte","prix":315},
+    {"image":"./media/france.jpg","pays":"France","description":"Paris et les bâteaux mouches","prix":150},
+    {"image":"./media/canada.jpg","pays":"Canada","description":"Toronto et la province de Quebec","prix":2300}
+]
+}
