@@ -1,0 +1,173 @@
+body {
+  background-color: #f1f1f1;
+  margin: 0; }
+
+.menu {
+  background-color: white;
+  display: flex;
+  position: fixed;
+  padding-left: 15px;
+  top: 0;
+  width: 100%;
+  justify-content: space-between; }
+
+nav {
+  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 20px; }
+
+nav a {
+  color: #4f7e45;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 10px; }
+
+.titre_menu {
+  color: #4f7e45;
+  text-align: center;
+  font-size: medium; }
+
+h1 {
+  color: #4f7e45;
+  text-align: center; }
+
+section {
+  background-color: #4f7e45;
+  padding: 5px;
+  margin-top: 10px;
+  color: #f1f1f1; }
+
+.active {
+  background-color: #ceefc8;
+  color: #2d4329; }
+
+.contenu {
+  padding-top: 40px;
+  padding-left: 15px;
+  padding-right: 15px; }
+
+/* style tableau */
+table {
+  width: 100%; }
+
+th {
+  background-color: #4f7e45;
+  color: #f1f1f1;
+  padding: 5px;
+  margin: 0px; }
+
+td {
+  padding: 5px; }
+
+tr:nth-child(2n) {
+  background-color: darkseagreen;
+  border: 1px solid #f1f1f1;
+  color: #f1f1f1; }
+
+tr:nth-child(2n):hover {
+  background-color: white;
+  color: #4f7e45; }
+
+tr:nth-child(2n+1) {
+  background-color: #ceefc8;
+  border: 1px solid #f1f1f1;
+  color: #4f7e45; }
+
+tr:nth-child(2n+1):hover {
+  background-color: white;
+  color: #4f7e45; }
+
+td a {
+  text-decoration: none;
+  color: #2d4329; }
+
+a:hover {
+  color: #4f7e45; }
+
+.perso {
+  display: flex;
+  flex-direction: column; }
+
+.perso li {
+  float: none; }
+
+article {
+  background-color: #4f7e45;
+  color: #f1f1f1;
+  padding: 10px;
+  margin: 15px; }
+
+fieldset {
+  background-color: #2d4329;
+  color: #f1f1f1;
+  border: none;
+  margin: 10px; }
+
+fieldset:hover {
+  background-color: #ceefc8;
+  color: #2d4329; }
+
+fieldset div {
+  display: flex; }
+
+button {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
+  border: none;
+  background-color: #2d4329;
+  color: #f1f1f1;
+  border-radius: 15%; }
+
+.infos_perso {
+  list-style: decimal; }
+
+/* menu */
+.nav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  padding-right: 10px; }
+
+li {
+  float: left; }
+
+li a, .dropbtn {
+  display: inline-block;
+  color: #4f7e45;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none; }
+
+li a:hover, .dropdown:hover .dropbtn {
+  background-color: #ceefc8;
+  color: #2d4329; }
+
+li.dropdown {
+  display: inline-block; }
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1; }
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left; }
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1; }
+
+.dropdown:hover .dropdown-content {
+  display: block; }
+
+/*# sourceMappingURL=index.css.map */

@@ -1,0 +1,7 @@
+var users = {"user":[
+    {"nom":"admin","email":"admin@gmail.com","pass":"admin","type":"admin"},
+    {"nom":"jean","email":"jean.valjean@gmail.com","pass":"jvj38","type":"visiteur"},
+    {"nom":"katniss","email":"katniss.everdeen@gmail.com","pass":"hungergames","type":"visiteur"},
+    {"nom":"prof","email":"leprofquinotebien@gmail.com","pass":"prof2ouf","type":"visiteur"}
+]
+}

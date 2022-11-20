@@ -1,7 +1,16 @@
 //Classes
+class User{
+    constructor(nom, email, pass, type){
+        this.nom = nom;
+        this.email = email;
+        this.pass = pass;
+        this.type = type; // soit admin soit visiteur
+    }
+}
+
 class Destination{
   constructor(image, pays, circuit, tarif) {
-    this.image = image
+    this.image = image;
     this.pays = pays;
     this.circuit = circuit;
     this.tarif = tarif;
@@ -30,6 +39,7 @@ class SousMenu{
 
 //Au refresh de la page, charger la page d'accueil
 window.onload = function(){
+    InitMenu();
     InitAccueil();
 }
 
@@ -38,7 +48,7 @@ function InitMenu(){
         //création du menu
         var menu_accueil = new Menu("Accueil", "", "InitAccueil()");
         var menu_perso = new Menu("Espace Perso", "perso.html");
-            perso_connexion = new SousMenu("Connexion","","InitMesInfos()");
+            perso_connexion = new SousMenu("Connexion","","InitConnexion()");
             perso_infos = new SousMenu("Mes Informations","","InitMesInfos()");
             perso_messagerie = new SousMenu("Messagerie","","InitMesInfos()");
             perso_historique = new SousMenu("Historique","", "InitMesInfos()");
@@ -49,86 +59,113 @@ function InitMenu(){
             perso_sousmenus.push(perso_historique);
             menu_perso.sous_menus = perso_sousmenus;
         var menu_destinations = new Menu("Destinations", "","InitDestination()");//"destinations.html");
-        var menu_audio = new Menu("Voyage Virtuel Audio","","InitAudio()");
-        var menu_video = new Menu("Voyage Virtuel Video","","InitVideo()");
+
+        //choix de ma part de ne pas afficher ces deux pages car pas très interressantes + trop long pour ce que c'est
+        // var menu_audio = new Menu("Voyage Virtuel Audio","","InitAudio()");
+        // var menu_video = new Menu("Voyage Virtuel Video","","InitVideo()");
         var menu_contact = new Menu("Contact", "", "InitContact()");
         var menus = [];
         menus.push(menu_accueil);
         menus.push(menu_perso);
         menus.push(menu_destinations);
-        menus.push(menu_audio);
-        menus.push(menu_video);
+        // menus.push(menu_audio);
+        // menus.push(menu_video);
         menus.push(menu_contact);
     
         //affichage du menu
-        var div_menu = document.getElementsByClassName("menu")[0];  
+        var div_menu = document.getElementsByClassName("menu")[0];
+        div_menu.classList.add("sidebar_menu");
         div_menu.innerHTML = ""; 
-            var h1_titre = document.createElement("h1");
-            h1_titre.classList.add("titre_menu");
-            h1_titre.innerText = "Travel Discount";
-            div_menu.appendChild(h1_titre);
-    
-            var ul_menu_nav = document.createElement("ul");
-            ul_menu_nav.classList.add("nav");
-    
-            for(var i = 0; i< menus.length; i++){
-                var li = document.createElement("li");
-                
-                if(menus[i].sous_menus != undefined){//s'il y a un sous menu, on va le créer aussi
-                    li.classList.add("dropdown");
-                    var a = document.createElement("a");
-                    a.classList.add("dropbtn");
-                    a.setAttribute("href","javascript:void(0)");
-                    a.innerText = menus[i].nom;
-                    li.appendChild(a);
-    
-                    var div_sous_menu = document.createElement("div");
-                    div_sous_menu.classList.add("dropdown-content");
-                        for(var y = 0; y < menus[i].sous_menus.length; y++){
-                            if(menus[i].sous_menus[y].onclick != undefined){
-                                var p_ss = document.createElement("p");
-                                p_ss.classList.add("p_lien_sousmenu");
-                                p_ss.setAttribute("onclick",menus[i].sous_menus[y].onclick);
-                                p_ss.innerText = menus[i].sous_menus[y].nom;
-                                div_sous_menu.appendChild(p_ss);
-                            }else{
-                                var a_ss = document.createElement("a");
-                                a_ss.setAttribute("onclick",menus[i].sous_menus[y].onclick);
-                                a_ss.setAttribute("href",menus[i].sous_menus[y].lien);
-                                a_ss.innerText = menus[i].sous_menus[y].nom;
-                                div_sous_menu.appendChild(a_ss);
+            var nav_bar = document.createElement("nav");
+            nav_bar.classList.add("col");
+            nav_bar.classList.add("navbar");
+            nav_bar.classList.add("navbar-expand-md");
+            nav_bar.classList.add("navbar-dark");
+            nav_bar.classList.add("bg-fonce");
+            nav_bar.classList.add("fixed-top");
+            nav_bar.classList.add("p-0");
+            nav_bar.classList.add("pl-3");
+                var a_title = document.createElement("a");
+                a_title.classList.add("navbar-brand");
+                a_title.classList.add("text-white");
+                a_title.innerText = "Travel Discount";
+                nav_bar.appendChild(a_title);
+
+                var button_navbar = document.createElement("button");
+                button_navbar.classList.add("navbar-toggler");
+                button_navbar.setAttribute("type","button");
+                button_navbar.setAttribute("data-toggle","collapse");
+                button_navbar.setAttribute("data-target","#navbarsExampleDefault");
+                button_navbar.setAttribute("aria-controls","navbarsExampleDefault");
+                button_navbar.setAttribute("aria-expanded","false");
+                button_navbar.setAttribute("aria-label","Toggle navigation");
+                    var span_button = document.createElement("span");
+                    span_button.classList.add("navbar-toggler-icon");
+                    button_navbar.appendChild(span_button);
+                nav_bar.appendChild(button_navbar);
+
+                var div_nav = document.createElement("div");
+                div_nav.classList.add("collapse");
+                div_nav.classList.add("navbar-collapse");
+                div_nav.setAttribute("id","navbarsExampleDefault");
+                    var ul_nav = document.createElement("ul");
+                    ul_nav.classList.add("navbar-nav");
+                        /* Boucle sur le nb d'elem du menu */
+                        for(var i = 0; i< menus.length; i++){
+                            var li_nav = document.createElement("li");
+                            li_nav.classList.add("nav-item");
+                            if(menus[i].sous_menus != undefined){//s'il y a un sous menu, on va le créer aussi
+                                li_nav.setAttribute("id","navbarDropdown");
+                                li_nav.setAttribute("role","button");
+                                li_nav.setAttribute("data-toggle","dropdown");
+                                li_nav.setAttribute("aria-haspopup","true");
+                                li_nav.setAttribute("aria-expanded","false");
+                                    var a_ss_menu = document.createElement("a");
+                                    a_ss_menu.classList.add("nav-link");
+                                    a_ss_menu.innerText = menus[i].nom;
+                                    li_nav.appendChild(a_ss_menu);
+
+                                    var div_ss_menu = document.createElement("div");
+                                    div_ss_menu.classList.add("dropdown-menu");
+                                    div_ss_menu.setAttribute("aria-labelledby","navbarDropdown");
+                                        for(var y = 0; y < menus[i].sous_menus.length; y++){
+                                            //<p class="dropdown-item" onclick="InitMesInfos()">Connexion</p>
+                                            if(menus[i].sous_menus[y].onclick != undefined){
+                                                var p_ss = document.createElement("p");
+                                                p_ss.classList.add("dropdown-item");
+                                                p_ss.setAttribute("onclick",menus[i].sous_menus[y].onclick);
+                                                p_ss.innerText = menus[i].sous_menus[y].nom;
+                                                div_ss_menu.appendChild(p_ss);
+                                            }else{
+                                                var a_ss = document.createElement("a");
+                                                a_ss.setAttribute("onclick",menus[i].sous_menus[y].onclick);
+                                                a_ss.setAttribute("href",menus[i].sous_menus[y].lien);
+                                                a_ss.innerText = menus[i].sous_menus[y].nom;
+                                                div_ss_menu.appendChild(a_ss);
+                                            }
+                                        }
+                                    li_nav.appendChild(div_ss_menu);
+                            }else{//pas de sous menu
+                                var a_menu = document.createElement("a");
+                                a_menu.classList.add("nav-link");
+                                a_menu.setAttribute("onclick",menus[i].onclick);
+                                a_menu.innerText = menus[i].nom;
+                                li_nav.appendChild(a_menu);
                             }
+                            ul_nav.appendChild(li_nav);
                         }
-                    li.appendChild(div_sous_menu);
-                }else{//menu sans sous menu :
-                    if(menus[i].onclick != undefined){
-                        var p_menu = document.createElement("p");
-                        p_menu.setAttribute("onclick",menus[i].onclick);
-                        p_menu.classList.add("p_titre_menu");
-                        p_menu.innerText = menus[i].nom;
-                        li.classList.add("li_menu");
-                        li.appendChild(p_menu);
-                    }else{
-                        var a_menu = document.createElement("a");
-                        a_menu.setAttribute("href",menus[i].lien);
-                        a_menu.innerText = menus[i].nom;
-                        li.appendChild(a_menu);
-                    }
-                    
-                }
-                ul_menu_nav.appendChild(li);
-            }
-            
-            div_menu.appendChild(ul_menu_nav);
-            document.getElementsByTagName("body")[0].appendChild(div_menu);
+                        
+                    div_nav.appendChild(ul_nav);
+                nav_bar.appendChild(div_nav);
+            div_menu.appendChild(nav_bar);
 }
 
 /* Affiche le contenu de la page Destination + maj le menu */
 function InitDestination(){
     InitMenu();
-    for(var i = 0; i< document.getElementsByClassName("p_titre_menu").length; i++){
-        if(document.getElementsByClassName("p_titre_menu")[i].innerText =="Destinations"){
-            document.getElementsByClassName("p_titre_menu")[i].parentElement.classList.add("active");
+    for(var i= 0; i< document.getElementsByClassName("nav-link").length; i++){
+        if(document.getElementsByClassName("nav-link")[i].innerText == "Destinations"){
+            document.getElementsByClassName("nav-link")[i].classList.add("active");
         }
     }
     var div_contenu = document.getElementsByClassName("contenu")[0];
@@ -139,46 +176,8 @@ function InitDestination(){
         button_admin.setAttribute("onclick","AdminMode()");
         button_admin.innerText = "Admin";
         div_contenu.appendChild(button_admin);
-        //titre
-        var h1 = document.createElement("h1");
-        h1.innerText = "Destinations";
-        div_contenu.appendChild(h1);
-        //table
-        var table = document.createElement("table");
-            var thead = document.createElement("thead");
-                var tr = document.createElement("tr");
-                    //th
-                    var th_image = document.createElement("th");
-                    th_image.innerText = "Image";
-                    tr.appendChild(th_image);
-                    //th
-                    var th_Pays = document.createElement("th");
-                    th_Pays.innerText = "Pays";
-                    tr.appendChild(th_Pays);
-                    //th
-                    var th_circuit = document.createElement("th");
-                    th_circuit.innerText = "Circuit";
-                    tr.appendChild(th_circuit);
-                    //th
-                    var th_Tarif = document.createElement("th");
-                    th_Tarif.innerText = "Tarif";
-                    tr.appendChild(th_Tarif);
-                    //th
-                    var th_reservation = document.createElement("th");
-                    th_reservation.innerText = "Réservation";
-                    tr.appendChild(th_reservation);
-                    //th
-                    var th_admin = document.createElement("th");
-                    th_admin.innerText = "Admin";
-                    th_admin.classList.add("admin_mode");
-                    th_admin.classList.add("hidden");
-                    tr.appendChild(th_admin);
-                thead.appendChild(tr);
-                table.appendChild(thead);
-                var tbody = document.createElement("tbody");
-                tbody.setAttribute("id","destinations");
-                table.appendChild(tbody);
-        div_contenu.appendChild(table);
+
+        //bouton ajout
         var btn_ajout = document.createElement("button");
         btn_ajout.setAttribute("id","btn_admin_ajout");
         btn_ajout.setAttribute("onclick","AdminAjoutForm()");
@@ -186,12 +185,84 @@ function InitDestination(){
         btn_ajout.classList.add("hidden");
         btn_ajout.innerText = "Ajouter une destination";
         div_contenu.appendChild(btn_ajout);
+        //titre
+        var h1 = document.createElement("h1");
+        h1.innerText = "Destinations";
+        h1.classList.add("text-main");
+        h1.classList.add("text-center");
+        div_contenu.appendChild(h1);
+
+        var div_container = document.createElement("div");
+        div_container.classList.add("w-75");
+        div_container.classList.add("d-flex");
+        div_container.classList.add("mx-auto");
+            
+
+            var div_row = document.createElement("div");
+            div_row.classList.add("row");
+            div_row.classList.add("jumbo-father");
+            for(var i = 0; i< destinations['destination'].length; i++){
+                var div_jumbo = document.createElement("div");
+                div_jumbo.classList.add("mt-4");
+                div_jumbo.classList.add("p-5");
+                div_jumbo.classList.add("m-2");
+                div_jumbo.classList.add("bg-fond");
+                div_jumbo.classList.add("text-main");
+                div_jumbo.classList.add("rounded");
+                div_jumbo.classList.add("jumbo");
+                    var titre = document.createElement("h1");
+                    titre.innerText = destinations['destination'][i]['pays'];
+                    div_jumbo.appendChild(titre);
+                    var div_flex = document.createElement("div");
+                    div_flex.classList.add("d-flex");
+                    div_flex.classList.add("justify-content-between");
+                        var p_desc = document.createElement("p");
+                        p_desc.innerText = destinations['destination'][i]['description'];
+                        div_flex.appendChild(p_desc);
+                        var p_prix = document.createElement("p");
+                        p_prix.innerText = destinations['destination'][i]['prix']+"€";
+                        div_flex.appendChild(p_prix);
+                    div_jumbo.appendChild(div_flex);
+                    var img = document.createElement("img");
+                    img.setAttribute("src",destinations['destination'][i]['image']);
+                    img.setAttribute("width","100%");
+                    div_jumbo.appendChild(img);
+
+                    var btn_reserver = document.createElement('button');
+                    btn_reserver.classList.add("d-flex");
+                    btn_reserver.classList.add("mx-auto");
+                    btn_reserver.classList.add("mt-2");
+                    btn_reserver.classList.add("button");
+                    btn_reserver.innerText = "Réserver";
+                    div_jumbo.appendChild(btn_reserver);
+
+                    var btn_modifier = document.createElement('button');
+                    btn_modifier.classList.add("mt-2");
+                    btn_modifier.classList.add("admin_mode");
+                    btn_modifier.classList.add("button");
+                    btn_modifier.innerText = "Modifier";
+                    btn_modifier.classList.add("hidden");
+                    btn_modifier.setAttribute("onclick","InitFormModifier("+JSON.stringify(destinations['destination'][i])+")");
+                    div_jumbo.appendChild(btn_modifier);
+                div_row.appendChild(div_jumbo);
+            }
+
+            div_container.appendChild(div_row);
+        div_contenu.appendChild(div_container);
         //div pop up ajout
         var divajout = document.createElement("div");
+        divajout.classList.add("position-fixed");
+        divajout.classList.add("start-50");
+        divajout.classList.add("top-50");
         divajout.classList.add("admin_mode_ajout");
+        divajout.classList.add("w-50");
+        divajout.classList.add("text-clair");
+        divajout.classList.add("bg-fonce");
         divajout.classList.add("hidden");
+        divajout.classList.add("p-2");
         divajout.setAttribute("id","admin_ajout_form");
             var h2 = document.createElement("h2");
+            h2.classList.add("text-center");
             h2.innerText = "Ajouter une destination";
             divajout.appendChild(h2);
             var perreur = document.createElement("p");
@@ -199,28 +270,39 @@ function InitDestination(){
             divajout.appendChild(perreur);
 
             var divinputajout = document.createElement("div");
-            divinputajout.classList.add("flex");
             divinputajout.classList.add("admin_input_ajout");
+            divinputajout.classList.add("row");
                 var inputpays = document.createElement("input");
                 inputpays.setAttribute("id","admin_add_pays");
                 inputpays.setAttribute("type","text");
                 inputpays.setAttribute("placeholder","Pays");
+                inputpays.classList.add("w-75");
+                inputpays.classList.add("d-flex");
+                inputpays.classList.add("mx-auto");
                 divinputajout.appendChild(inputpays);
 
                 var inputdescajout = document.createElement("input");
                 inputdescajout.setAttribute("id","admin_add_description");
                 inputdescajout.setAttribute("type","text");
                 inputdescajout.setAttribute("placeholder","Description");
+                inputdescajout.classList.add("w-75");
+                inputdescajout.classList.add("d-flex");
+                inputdescajout.classList.add("mx-auto");
                 divinputajout.appendChild(inputdescajout);
 
                 var inputprixajout = document.createElement("input");
                 inputprixajout.setAttribute("id","admin_add_prix");
                 inputprixajout.setAttribute("type","number");
                 inputprixajout.setAttribute("placeholder","Prix");
-                divinputajout.appendChild(inputdescajout);
+                inputprixajout.classList.add("w-75");
+                inputprixajout.classList.add("d-flex");
+                inputprixajout.classList.add("mx-auto");
+                divinputajout.appendChild(inputprixajout);
 
                 var divimg = document.createElement("div");
-                divimg.classList.add("flex");
+                divimg.classList.add("d-flex");
+                divimg.classList.add("w-75");
+                divimg.classList.add("mx-auto");
                     var label = document.createElement("label");
                     label.setAttribute("id","label_add_image");
                     label.setAttribute("for","admin_add_image");
@@ -238,28 +320,34 @@ function InitDestination(){
             var button_ajout = document.createElement("button");
             button_ajout.setAttribute("onclick","AdminAjout()");
             button_ajout.innerText = "Ajouter";
+            button_ajout.classList.add("d-flex");   
+            button_ajout.classList.add("mx-auto");
             divajout.appendChild(button_ajout);
         div_contenu.appendChild(divajout);
-    InitTab();
 }
 
 /* Affiche le contenu de la page Accueil + maj le menu */
 function InitAccueil(){
     InitMenu();
-    for(var i = 0; i< document.getElementsByClassName("p_titre_menu").length; i++){
-        if(document.getElementsByClassName("p_titre_menu")[i].innerText =="Accueil"){
-            document.getElementsByClassName("p_titre_menu")[i].parentElement.classList.add("active");
+    for(var i= 0; i< document.getElementsByClassName("nav-link").length; i++){
+        if(document.getElementsByClassName("nav-link")[i].innerText == "Accueil"){
+            document.getElementsByClassName("nav-link")[i].classList.add("active");
         }
     }
     var divcontenu = document.getElementsByClassName("contenu")[0];
         divcontenu.innerHTML = "";
         var h1 = document.createElement("h1");
         h1.innerText = "Travel Discount";
+        h1.classList.add("text-main");
+        h1.classList.add("text-center");
         divcontenu.appendChild(h1);
         var section_desc = document.createElement("section");
+        section_desc.classList.add("bg-fond");
+        section_desc.classList.add("text-main");
+        section_desc.classList.add("m-3");
+        section_desc.classList.add("p-2");
         section_desc.setAttribute("id","description_generale");
             var h2_desc = document.createElement("h2");
-            h2_desc.classList.add("h2_blanc");
             h2_desc.innerText = "Description Générale";
             section_desc.appendChild(h2_desc);
             var p_desc = document.createElement("p");
@@ -270,9 +358,12 @@ function InitAccueil(){
             section_desc.appendChild(em_desc);
         divcontenu.appendChild(section_desc);
         var section_info = document.createElement("section");
+        section_info.classList.add("bg-fond");
+        section_info.classList.add("text-main");
+        section_info.classList.add("m-3");
+        section_info.classList.add("p-2");
         section_info.setAttribute("id","infos_pratiques");
         var h2_info = document.createElement("h2");
-            h2_info.classList.add("h2_blanc");
             h2_info.innerText = "Infos Pratiques";
             section_info.appendChild(h2_info);
             var p_info = document.createElement("p");
@@ -284,112 +375,14 @@ function InitAccueil(){
         divcontenu.appendChild(section_info);
 }
 
-/* Affiche le contenu de la page Vidéo + maj le menu */
-function InitVideo(){
-    InitMenu();
-    for(var i = 0; i< document.getElementsByClassName("p_titre_menu").length; i++){
-        if(document.getElementsByClassName("p_titre_menu")[i].innerText =="Voyage Virtuel Video"){
-            document.getElementsByClassName("p_titre_menu")[i].parentElement.classList.add("active");
-        }
-    }
-    var divcontenu = document.getElementsByClassName("contenu")[0];
-        divcontenu.innerHTML = "";
-        var h1 = document.createElement("h1");
-        h1.innerText = "Voyage Virtuel Vidéo";
-        divcontenu.appendChild(h1);
-        var article1 = document.createElement("article");
-            var video1 = document.createElement("video");
-            video1.setAttribute("width","100%");
-            video1.setAttribute("autoplay","true");
-                var source1 = document.createElement("source");
-                source1.setAttribute("src","media/canada.mp4");
-                source1.setAttribute("type","video/mp4");
-                video1.appendChild(source1);
-            article1.appendChild(video1);    
-        divcontenu.appendChild(article1);
-
-        var article2 = document.createElement("article");
-            var video2 = document.createElement("video");
-            video2.setAttribute("width","100%");
-            video2.setAttribute("autoplay","true");
-                var source2 = document.createElement("source");
-                source2.setAttribute("src","media/argentine.mp4");
-                source2.setAttribute("type","video/mp4");
-                video2.appendChild(source2);
-            article2.appendChild(video2);    
-        divcontenu.appendChild(article2);
-
-        var article3 = document.createElement("article");
-            var video3 = document.createElement("video");
-            video3.setAttribute("width","100%");
-            video3.setAttribute("autoplay","true");
-                var source3 = document.createElement("source");
-                source3.setAttribute("src","media/venise.mp4");
-                source3.setAttribute("type","video/mp4");
-                video3.appendChild(source3);
-            article3.appendChild(video3);    
-        divcontenu.appendChild(article3);
-}
-
-/* Affiche le contenu de la page Audio + maj le menu */
-function InitAudio(){
-    InitMenu();
-    for(var i = 0; i< document.getElementsByClassName("p_titre_menu").length; i++){
-        if(document.getElementsByClassName("p_titre_menu")[i].innerText =="Voyage Virtuel Audio"){
-            document.getElementsByClassName("p_titre_menu")[i].parentElement.classList.add("active");
-        }
-    }
-    var divcontenu = document.getElementsByClassName("contenu")[0];
-        divcontenu.innerHTML = "";
-        var h1 = document.createElement("h1");
-        h1.innerText = "Voyage Virtuel Audio";
-        divcontenu.appendChild(h1);
-        var article1 = document.createElement("article");
-            var titre1 = document.createElement("h3");
-            titre1.innerText = "Séjour en Mésopotamie";
-            article1.appendChild(titre1);
-            var audio1 = document.createElement("audio");
-            audio1.setAttribute("controls","");
-            audio1.setAttribute("src","media/mesopotamie.mp3");
-            article1.appendChild(audio1);
-        divcontenu.appendChild(article1);
-
-        var article2 = document.createElement("article");
-            var titre2 = document.createElement("h3");
-            titre2.innerText = "Voyage au centre de la Terre";
-            article2.appendChild(titre2);
-            var audio2 = document.createElement("audio");
-            audio2.setAttribute("controls","");
-            audio2.setAttribute("src","media/terre.mp3");
-            article2.appendChild(audio2);
-        divcontenu.appendChild(article2);
-
-        var article3 = document.createElement("article");
-            var titre3 = document.createElement("h3");
-            titre3.innerText = "Escapée lunaire";
-            article3.appendChild(titre3);
-            var audio3 = document.createElement("audio");
-            audio3.setAttribute("controls","");
-            audio3.setAttribute("src","media/lune.mp3");
-            article3.appendChild(audio3);
-        divcontenu.appendChild(article3);
-
-        var article4 = document.createElement("article");
-            var titre4 = document.createElement("h3");
-            titre4.innerText = "Traversée du Désert";
-            article4.appendChild(titre4);
-            var audio4 = document.createElement("audio");
-            audio4.setAttribute("controls","");
-            audio4.setAttribute("src","media/desert.mp3");
-            article4.appendChild(audio4);
-        divcontenu.appendChild(article4);
-}
-
 /* Affiche le contenu de la page Mes Infos + maj le menu */
 function InitMesInfos(){
     InitMenu();
-    document.getElementsByClassName("dropdown")[0].classList.add("active");
-
+    for(var i= 0; i< document.getElementsByClassName("nav-link").length; i++){
+        if(document.getElementsByClassName("nav-link")[i].innerText == "Espace Perso"){
+            document.getElementsByClassName("nav-link")[i].classList.add("active");
+        }
+    }
     var divcontenu = document.getElementsByClassName("contenu")[0];
         divcontenu.innerHTML = "";
         var h1 = document.createElement("h1");
@@ -435,131 +428,291 @@ function InitMesInfos(){
 /* Affiche le contenu de la page Contact + maj le menu */
 function InitContact(){
     InitMenu();
-    for(var i = 0; i< document.getElementsByClassName("p_titre_menu").length; i++){
-        if(document.getElementsByClassName("p_titre_menu")[i].innerText =="Contact"){
-            document.getElementsByClassName("p_titre_menu")[i].parentElement.classList.add("active");
+    for(var i= 0; i< document.getElementsByClassName("nav-link").length; i++){
+        if(document.getElementsByClassName("nav-link")[i].innerText == "Contact"){
+            document.getElementsByClassName("nav-link")[i].classList.add("active");
         }
     }
+    
     var divcontenu = document.getElementsByClassName("contenu")[0];
-    divcontenu.innerHTML = "";
-    var form_contact = document.createElement("form");
-    form_contact.setAttribute("id","form_contact");
-        var h1 = document.createElement("h1");
-        h1.innerText = "Contact";
-        form_contact.appendChild(h1);
+    divcontenu.innerHTML ="";
+        var div_contact_form = document.createElement("div");
+        div_contact_form.classList.add("contact_form");
+            var div_container = document.createElement("div");
+            div_container.classList.add("container");
+                div_row = document.createElement("div");
+                div_row.classList.add("row");
+                    div_offset = document.createElement("div");
+                    div_offset.classList.add("col-lg-10");
+                    div_offset.classList.add("offset-lg-1");
+                        div_contact_form_container = document.createElement("div");
+                        div_contact_form_container.classList.add("contact_form_container");
+                            var div_form_title = document.createElement("div");
+                            div_form_title.classList.add("contact_form_title");
+                            div_form_title.classList.add("text-main");
+                            div_form_title.innerText = "Contact";
+                            div_contact_form_container.appendChild(div_form_title);
 
-        var p = document.createElement("p");
-        p.setAttribute("id","p_form");
-        p.innerText = "Une remarque ? Une suggestion ? N'hésitez-pas à nous écrire.";
-        form_contact.appendChild(p);
+                            var p_form = document.createElement("p");
+                            p_form.setAttribute("id","p_form");
+                            p_form.innerText = "Une remarque ? Une suggestion ? N'hésitez-pas à nous écrire.";
+                            div_contact_form_container.appendChild(p_form);
 
-        var label_nom = document.createElement("label");
-        label_nom.setAttribute("for","nom");
-        label_nom.innerHTML ="Votre nom : <em class=\"red\">*</em>";
-        form_contact.appendChild(label_nom);
+                            var form = document.createElement("form");
+                            form.setAttribute("id","contact_form");
+                                var div_in_form = document.createElement("div");
+                                div_in_form.classList.add("contact_form_inputs");
+                                div_in_form.classList.add("d-flex");
+                                div_in_form.classList.add("flex-md-row");
+                                div_in_form.classList.add("flex-column");
+                                div_in_form.classList.add("justify-content-between");
+                                div_in_form.classList.add("align-items-between");
+                                    var input_name = document.createElement("input");
+                                    input_name.setAttribute("type","text");
+                                    input_name.setAttribute("id","contact_form_name");
+                                    input_name.classList.add("contact_form_name");
+                                    input_name.classList.add("input_field");
+                                    input_name.setAttribute("placeholder","Votre nom");
+                                    input_name.setAttribute("required","required");
+                                    input_name.setAttribute("data-error","Votre nom est obligatoire.");
+                                    div_in_form.appendChild(input_name);
 
-        var input_nom = document.createElement("input");
-        input_nom.setAttribute("type","text");
-        input_nom.setAttribute("name","nom");
-        input_nom.setAttribute("id","nom");
-        input_nom.setAttribute("required","true");
-        form_contact.appendChild(input_nom);
+                                    var input_email = document.createElement("input");
+                                    input_email.setAttribute("type","text");
+                                    input_email.setAttribute("id","contact_form_email");
+                                    input_email.classList.add("contact_form_email");
+                                    input_email.classList.add("input_field");
+                                    input_email.setAttribute("placeholder","Votre email");
+                                    input_email.setAttribute("required","required");
+                                    input_email.setAttribute("data-error","Votre email est obligatoire.");
+                                    div_in_form.appendChild(input_email);
 
-        var label_email = document.createElement("label");
-        label_email.setAttribute("type","text");
-        label_email.innerHTML = "Votre e-mail : <em class=\"red\">*</em>";
-        form_contact.appendChild(label_email);
+                                    var input_phone = document.createElement("input");
+                                    input_phone.setAttribute("type","text");
+                                    input_phone.setAttribute("id","contact_form_email");
+                                    input_phone.classList.add("contact_form_email");
+                                    input_phone.classList.add("input_field");
+                                    input_phone.setAttribute("placeholder","Votre Téléphone");
+                                    div_in_form.appendChild(input_phone);
+                                form.appendChild(div_in_form);
+                                var div_objet = document.createElement("div");
+                                div_objet.classList.add("contact_form_objet");
+                                div_objet.classList.add("mb-3");
+                                    var input_obj = document.createElement("input");
+                                    input_obj.setAttribute("type","text");
+                                    input_obj.classList.add("input_field");
+                                    input_obj.setAttribute("placeholder","Objet");
+                                    div_objet.appendChild(input_obj);
+                                form.appendChild(div_objet);
 
-        var input_email = document.createElement("input");
-        input_email.setAttribute("type","text");
-        input_email.setAttribute("name","email");
-        input_email.setAttribute("id","email");
-        input_email.setAttribute("required","true");
-        form_contact.appendChild(input_email);
-
-        var label_objet = document.createElement("label");
-        label_objet.setAttribute("for","objet");
-        label_objet.innerText = "Objet";
-        form_contact.appendChild(label_objet);
-
-        var input_objet = document.createElement("input");
-        input_objet.setAttribute("type","text");
-        input_objet.setAttribute("name","objet");
-        input_objet.setAttribute("id","objet");
-        form_contact.appendChild(input_objet);
-
-        var label_message = document.createElement("label");
-        label_message.setAttribute("for","message");
-        label_message.innerText = "Votre message :";
-        form_contact.appendChild(label_message);
-
-        var text_area = document.createElement("textarea");
-        text_area.setAttribute("name","message");
-        text_area.setAttribute("id","message");
-        text_area.setAttribute("cols","30");
-        text_area.setAttribute("rows","10");
-        text_area.innerText = "Votre message...";
-        form_contact.appendChild(text_area);
-
-        var button_contact = document.createElement("button");
-        button_contact.setAttribute("onclick","Contacter()");
-        button_contact.innerText = "Envoyer";
-        form_contact.appendChild(button_contact);
-    divcontenu.appendChild(form_contact);
+                                var div_text = document.createElement("div");
+                                div_text.classList.add("contact_form_text");
+                                    var textarea = document.createElement("textarea");
+                                    textarea.setAttribute("id","contact_form_message");
+                                    textarea.classList.add("text_field");
+                                    textarea.classList.add("contact_form_message");
+                                    textarea.setAttribute("name","message");
+                                    textarea.setAttribute("rows","4");
+                                    textarea.setAttribute("placeholder","Message");
+                                    textarea.setAttribute("required","required");
+                                    textarea.setAttribute("data-error","S'il vous plaît écrivez nous un message.");
+                                    div_text.appendChild(textarea);
+                                form.appendChild(div_text);
+                                var div_button = document.createElement("div");
+                                div_button.classList.add("contact_form_button");
+                                    var button_contact = document.createElement("button");
+                                    button_contact.setAttribute("type","submit");
+                                    button_contact.classList.add("button");
+                                    button_contact.classList.add("contact_submit_button");
+                                    button_contact.setAttribute("onclick","Contacter()");
+                                    button_contact.innerText = "Envoyer";
+                                    div_button.appendChild(button_contact);
+                                form.appendChild(div_button);
+                            div_contact_form_container.appendChild(form);
+                        div_offset.appendChild(div_contact_form_container);
+                    div_row.appendChild(div_offset);
+                div_container.appendChild(div_row);
+            div_contact_form.appendChild(div_container);
+        divcontenu.appendChild(div_contact_form);
 }
 
-/* Affiche le tableau de destination |page "Destination" */
-function InitTab(){
-    var long = destinations['destination'].length;
-    //ajouts des destinations à la page
-    var bloc_dest = document.getElementById("destinations");
-    if(bloc_dest == null){
-        return;
+/* 
+    Affiche le formulaire de connexion
+*/
+function InitConnexion(){
+    var divcontenu = document.getElementsByClassName("contenu")[0];
+    if(document.getElementById("pop-up-creation-compte") != null){
+        document.getElementById("pop-up-creation-compte").classList.add("hidden");
     }
-    bloc_dest.innerHTML = "";
-    if(bloc_dest != null ){
-        for(var i = 0; i< long; i++){
-            var tr = document.createElement("tr");
-            var td_Image = document.createElement("td");
-                td_Image.setAttribute("style","width: 25%;");
-                var img_Image = document.createElement("img");
-                var img = destinations['destination'][i].image;
-                img_Image.setAttribute("style","width: inherit; margin-left: auto; margin-right: auto; display: flex;");
-                img_Image.setAttribute("src", img);
-                img_Image.setAttribute("width","25%");
-                td_Image.appendChild(img_Image);
+    if(document.getElementById("pop-up-connexion") == null){
+        //creation de la popup
+        //div pop up ajout
+        var divajout = document.createElement("div");
+        divajout.classList.add("position-fixed");
+        divajout.classList.add("start-50");
+        divajout.classList.add("top-50");
+        divajout.setAttribute("id","pop-up-connexion");
+        divajout.classList.add("w-50");
+        divajout.classList.add("text-clair");
+        divajout.classList.add("bg-fonce");
+        divajout.classList.add("p-2");
+        ///divajout.setAttribute("id","admin_ajout_form");
+            var h2 = document.createElement("h2");
+            h2.classList.add("text-center");
+            h2.innerText = "Se Connecter";
+            divajout.appendChild(h2);
+            var perreur = document.createElement("p");
+            perreur.setAttribute("id","erreur");
+            divajout.appendChild(perreur);
 
-            var td_Pays = document.createElement("td");
-            td_Pays.innerText = destinations['destination'][i].pays;
+            var divinputajout = document.createElement("div");
+            divinputajout.classList.add("admin_input_ajout");
+            divinputajout.classList.add("row");
+                var inputemail = document.createElement("input");
+                inputemail.setAttribute("id","connexion_email");
+                inputemail.setAttribute("type","text");
+                inputemail.setAttribute("placeholder","Votre email");
+                inputemail.classList.add("w-75");
+                inputemail.classList.add("d-flex");
+                inputemail.classList.add("mx-auto");
+                divinputajout.appendChild(inputemail);
 
-            var td_circuit = document.createElement("td");
-            td_circuit.innerText = destinations['destination'][i]. description;
+                var inputpassword = document.createElement("input");
+                inputpassword.setAttribute("id","connexion_password");
+                inputpassword.setAttribute("type","password");
+                inputpassword.setAttribute("placeholder","Votre mot de passe");
+                inputpassword.classList.add("w-75");
+                inputpassword.classList.add("d-flex");
+                inputpassword.classList.add("mx-auto");
+                divinputajout.appendChild(inputpassword);
 
-            var td_tarif = document.createElement("td");
-            td_tarif.innerText = destinations['destination'][i].prix + "€";
+            divajout.appendChild(divinputajout);
 
-            var td_reserver = document.createElement("td");
-            var a_reserver = document.createElement("a");
-            a_reserver.innerText = "Réserver";
-            td_reserver.appendChild(a_reserver);
-            
-            var td_admin = document.createElement("td");
-                td_admin.classList.add("hidden");
-                td_admin.classList.add("admin_mode");
-                td_admin.innerText = "Modifier";
-                td_admin.setAttribute("onclick","InitFormModifier("+JSON.stringify(destinations['destination'][i])+")");
-            
-            //ajouts des td au tr
-            tr.appendChild(td_Image);
-            tr.appendChild(td_Pays);
-            tr.appendChild(td_circuit);
-            tr.appendChild(td_tarif);
-            tr.appendChild(td_reserver);
-            tr.appendChild(td_admin);
-            //ajout du tr au tbody d'id = destinations
-            bloc_dest.appendChild(tr); 
-        }
+            var btn_creer_compte = document.createElement("button");
+            btn_creer_compte.classList.add("d-flex");
+            btn_creer_compte.classList.add("mx-auto");
+            btn_creer_compte.classList.add("m-2");
+            btn_creer_compte.setAttribute("onclick","CreerCompte()");
+            btn_creer_compte.innerText = "Créer un compte";
+            divajout.appendChild(btn_creer_compte);
+
+            var button_connexion = document.createElement("button");
+            button_connexion.setAttribute("onclick","Connexion()");
+            button_connexion.innerText = "Se connecter";
+            button_connexion.classList.add("m-2");
+            button_connexion.classList.add("d-flex");   
+            button_connexion.classList.add("mx-auto");
+            divajout.appendChild(button_connexion);
+
+            var button_fermer = document.createElement("button");
+            button_fermer.setAttribute("onclick","FermerConnexion()");
+            button_fermer.innerText = "Annuler";
+            button_fermer.classList.add("m-2");
+            button_fermer.classList.add("d-flex");   
+            button_fermer.classList.add("mx-auto");
+            divajout.appendChild(button_fermer);
+
+        divcontenu.appendChild(divajout);
+    }else{
+        //affichage
+        document.getElementById("pop-up-connexion").classList.remove("hidden");
     }
+    
+}
+
+/*
+    Permet de se connecter
+*/
+function Connexion(){
+
+}
+
+/* 
+    Ferme la pop up de connexion
+*/
+function FermerConnexion(){
+    document.getElementById("pop-up-connexion").classList.add("hidden");
+}
+
+/* Affiche la pop-up creer compte*/
+function CreerCompte(){
+    var divcontenu = document.getElementsByClassName("contenu")[0];
+    var popupco = document.getElementById("pop-up-connexion");
+    popupco.classList.add("hidden");
+    if(document.getElementById("pop-up-creation-compte") == null){
+        //Creation de la popup
+        //div pop up ajout
+        var divajout = document.createElement("div");
+        //divajout.classList.add("hidden");
+        divajout.classList.add("position-fixed");
+        divajout.classList.add("start-50");
+        divajout.classList.add("top-50");
+        divajout.classList.add("admin_mode_ajout");
+        divajout.classList.add("w-50");
+        divajout.classList.add("text-clair");
+        divajout.classList.add("bg-fonce");
+        divajout.classList.add("p-2");
+        divajout.setAttribute("id","pop-up-creation-compte");
+            var h2 = document.createElement("h2");
+            h2.classList.add("text-center");
+            h2.innerText = "Créer un compte";
+            divajout.appendChild(h2);
+            var perreur = document.createElement("p");
+            perreur.setAttribute("id","erreur");
+            divajout.appendChild(perreur);
+
+            var divinputajout = document.createElement("div");
+            divinputajout.classList.add("admin_input_ajout");
+            divinputajout.classList.add("row");
+                var input_nom = document.createElement("input");
+                input_nom.setAttribute("id","connexion_creer_nom");
+                input_nom.setAttribute("type","text");
+                input_nom.setAttribute("placeholder","Votre nom");
+                input_nom.classList.add("w-75");
+                input_nom.classList.add("d-flex");
+                input_nom.classList.add("mx-auto");
+                divinputajout.appendChild(input_nom);
+
+                var inputemail = document.createElement("input");
+                inputemail.setAttribute("id","connexion_creer_email");
+                inputemail.setAttribute("type","email");
+                inputemail.setAttribute("placeholder","Votre email");
+                inputemail.classList.add("w-75");
+                inputemail.classList.add("d-flex");
+                inputemail.classList.add("mx-auto");
+                divinputajout.appendChild(inputemail);
+
+                var inputpassword = document.createElement("input");
+                inputpassword.setAttribute("id","connexion_creer_password");
+                inputpassword.setAttribute("type","password");
+                inputpassword.setAttribute("placeholder","Votre mot de passe");
+                inputpassword.classList.add("w-75");
+                inputpassword.classList.add("d-flex");
+                inputpassword.classList.add("mx-auto");
+                divinputajout.appendChild(inputpassword);
+
+            divajout.appendChild(divinputajout);
+
+            var btn_creer_compte = document.createElement("button");
+            btn_creer_compte.classList.add("d-flex");
+            btn_creer_compte.classList.add("mx-auto");
+            btn_creer_compte.classList.add("m-2");
+            btn_creer_compte.setAttribute("onclick","CreerCompte()");
+            btn_creer_compte.innerText = "Créer un compte";
+            divajout.appendChild(btn_creer_compte);
+
+            var button_retour = document.createElement("button");
+            button_retour.setAttribute("onclick","InitConnexion()");
+            button_retour.innerText = "Annuler";
+            button_retour.classList.add("m-2");
+            button_retour.classList.add("d-flex");   
+            button_retour.classList.add("mx-auto");
+            divajout.appendChild(button_retour);
+        divcontenu.appendChild(divajout);
+    }else{
+        document.getElementById("pop-up-creation-compte").classList.remove("hidden");
+    }
+
 }
 
 /*
@@ -575,6 +728,13 @@ function InitFormModifier(elem){
         admin_modif_form.classList.add("admin_mode_modif");
         admin_modif_form.setAttribute("id","admin_mode_modif");
     }
+        admin_modif_form.classList.add("position-fixed");
+        admin_modif_form.classList.add('start-50');
+        admin_modif_form.classList.add('top-50');
+        admin_modif_form.classList.add("w-50");
+        admin_modif_form.classList.add("text-clair");
+        admin_modif_form.classList.add("bg-fonce");
+        admin_modif_form.classList.add("p-2");
         admin_modif_form.classList.remove("hidden");
         console.log("remove hidden form modif");
         var titre = document.createElement("h2");
@@ -605,13 +765,13 @@ function InitFormModifier(elem){
         button_modifier.setAttribute("onclick","Modifier("+JSON.stringify(elem)+")");
         button_modifier.setAttribute("style","display: flex; margin-left: auto; margin-right: auto; margin-top: 10px;");
         admin_modif_form.appendChild(button_modifier);
-        document.getElementsByClassName("contenu")[0].insertBefore(admin_modif_form, document.getElementsByTagName("table")[0].nextElementSibling);
+        document.getElementsByClassName("contenu")[0].insertBefore(admin_modif_form, document.getElementsByClassName("jumbo-father")[0].nextElementSibling);
     }
 
 /*Contacte pas vraiment le propriétaire du site mais fais l'illusion pour faire joli */
 function Contacter(){
     InitContact();
-    var divcontenu = document.getElementsByClassName("contenu")[0];
+    //var divcontenu = document.getElementsByClassName("contenu")[0];
     var p = document.createElement("p");
     p.classList.add("centered");
     p.classList.add("red");
@@ -677,7 +837,7 @@ function AdminAjout(){
             var long = destinations['destination'].length;
             destinations['destination'][long]= Dest;
             console.log(destinations);
-            InitTab();
+            InitDestination();
             if(document.getElementById("erreur").innerText != null){
                 document.getElementsByClassName("admin_mode_ajout")[0].classList.add("hidden");
                 for(var i = 0; i< document.getElementsByClassName("admin_mode").length; i++){
@@ -705,11 +865,14 @@ function Modifier(obj){
     if(document.getElementById("admin_modif_description").value){
         destinations['destination'][indexOfObject]['description'] = document.getElementById("admin_modif_description").value;
     }
-    InitTab();
+    InitDestination();
     for(var i = 0; i< document.getElementsByClassName("admin_mode").length; i++){
         document.getElementsByClassName("admin_mode")[i].classList.remove("hidden");
     }
-    document.getElementById('admin_mode_modif').classList.add("hidden");
+    if(document.getElementById('admin_mode_modif') != null){
+        document.getElementById('admin_mode_modif').classList.add("hidden");
+    }
+    
 }
 
 function Supprimer(obj){
@@ -717,9 +880,11 @@ function Supprimer(obj){
         return obj.pays === obj['pays'];
     });
     destinations['destination'].splice(indexOfObject, 1);
-    InitTab();
+    InitDestination();
     for(var i = 0; i< document.getElementsByClassName("admin_mode").length; i++){
         document.getElementsByClassName("admin_mode")[i].classList.remove("hidden");
     }
-    document.getElementById('admin_mode_modif').classList.add("hidden");
+    if(document.getElementById('admin_mode_modif') != null){
+        document.getElementById('admin_mode_modif').classList.add("hidden");
+    }
 }
