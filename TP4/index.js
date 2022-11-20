@@ -564,6 +564,10 @@ function InitConnexion(){
             var perreur = document.createElement("p");
             perreur.setAttribute("id","erreur");
             divajout.appendChild(perreur);
+            
+            var form_conn = document.createElement("form");
+            form_conn.setAttribute("ACTION","connexion.php");
+            form_conn.setAttribute("method","post");
 
             var divinputajout = document.createElement("div");
             divinputajout.classList.add("admin_input_ajout");
@@ -572,6 +576,7 @@ function InitConnexion(){
                 inputemail.setAttribute("id","connexion_email");
                 inputemail.setAttribute("type","text");
                 inputemail.setAttribute("placeholder","Votre email");
+                inputemail.setAttribute("value","email");
                 inputemail.classList.add("w-75");
                 inputemail.classList.add("d-flex");
                 inputemail.classList.add("mx-auto");
@@ -581,12 +586,13 @@ function InitConnexion(){
                 inputpassword.setAttribute("id","connexion_password");
                 inputpassword.setAttribute("type","password");
                 inputpassword.setAttribute("placeholder","Votre mot de passe");
+                inputpassword.setAttribute("value","password");
                 inputpassword.classList.add("w-75");
                 inputpassword.classList.add("d-flex");
                 inputpassword.classList.add("mx-auto");
                 divinputajout.appendChild(inputpassword);
 
-            divajout.appendChild(divinputajout);
+            form_conn.appendChild(divinputajout);
 
             var btn_creer_compte = document.createElement("button");
             btn_creer_compte.classList.add("d-flex");
@@ -594,15 +600,19 @@ function InitConnexion(){
             btn_creer_compte.classList.add("m-2");
             btn_creer_compte.setAttribute("onclick","CreerCompte()");
             btn_creer_compte.innerText = "Créer un compte";
-            divajout.appendChild(btn_creer_compte);
+            form_conn.appendChild(btn_creer_compte);
 
             var button_connexion = document.createElement("button");
             button_connexion.setAttribute("onclick","Connexion()");
+            button_connexion.setAttribute("type","submit")
+            button_connexion.setAttribute("value","Se Connecter");
             button_connexion.innerText = "Se connecter";
             button_connexion.classList.add("m-2");
             button_connexion.classList.add("d-flex");   
             button_connexion.classList.add("mx-auto");
-            divajout.appendChild(button_connexion);
+            form_conn.appendChild(button_connexion);
+            
+            divajout.appendChild(form_conn);
 
             var button_fermer = document.createElement("button");
             button_fermer.setAttribute("onclick","FermerConnexion()");
